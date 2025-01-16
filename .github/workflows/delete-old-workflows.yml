@@ -25,5 +25,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: 'iikkain/autorunning'
-          retain_days: 14
-          keep_minimum_runs: 100
+          retain_days: 30
+          keep_minimum_runs: 200
