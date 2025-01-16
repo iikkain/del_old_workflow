@@ -1,0 +1,29 @@
+name: Delete old workflow runs
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # 每周日凌晨执行一次
+  workflow_dispatch:
+
+jobs:
+  del_runs:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Delete workflow runs for current repo
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 30
+          keep_minimum_runs: 200
+
+      - name: Delete workflow runs for remote repo
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: 'Owner/repository'
+          retain_days: 14
+          keep_minimum_runs: 100
