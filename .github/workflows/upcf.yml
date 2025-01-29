@@ -11,6 +11,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Debug Environment Variables
+      env:
+        CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+        CF_RECORD_ID: ${{ secrets.CF_RECORD_ID }}
+        CF_NAME: ${{ secrets.CF_NAME }}
+      run: |
+        echo "CF_API_TOKEN=${CF_API_TOKEN}"
+        echo "CF_ZONE_ID=${CF_ZONE_ID}"
+        echo "CF_RECORD_ID=${CF_RECORD_ID}"
+        echo "CF_NAME=${CF_NAME}"
+
     - name: Update Cloudflare TXT Record
       env:
         CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -22,3 +34,9 @@ jobs:
         -H "Authorization: Bearer ${CF_API_TOKEN}" \
         -H "Content-Type: application/json" \
         --data '{"type":"TXT","name":"${CF_NAME}","content":"re-test","ttl":120,"proxied":false}'
+        
+    - name: Sleep for 2 minutes
+      run: sleep 120
+
+    - name: Script completed
+      run: echo "Script completed."
